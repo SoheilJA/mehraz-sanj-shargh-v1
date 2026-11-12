@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -44,7 +45,7 @@ function rewriteAbsoluteBase() {
 export default defineConfig({
   root: rootDir,
   base: `/${repoName}/`,
-  plugins: [rewriteAbsoluteBase()],
+  plugins: [tailwindcss(), rewriteAbsoluteBase()],
   build: {
     outDir: 'dist',
     emptyOutDir: true,
