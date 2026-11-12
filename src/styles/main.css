@@ -175,12 +175,8 @@
   }
   .mobile-menu .mm-caret { @apply text-muted transition-transform duration-300 shrink-0; }
   .mobile-menu .mm-toggle[aria-expanded="true"] .mm-caret { @apply rotate-180; }
-  .mobile-menu .mm-panel {
-    @apply grid transition-[grid-template-rows] duration-300 ease-elegant;
-    grid-template-rows: 0fr;
-  }
-  .mobile-menu .mm-panel.open { grid-template-rows: 1fr; }
-  .mobile-menu .mm-panel > .mm-sub { @apply overflow-hidden min-h-0; }
+  .mobile-menu .mm-panel { @apply hidden; }
+  .mobile-menu .mm-panel.open { @apply block; }
   .mobile-menu .mm-sub { @apply flex flex-wrap gap-x-5 gap-y-2 py-3 ps-1 text-sm text-muted; }
 
   .nav-burger span { @apply block w-6 h-[2px] bg-ink transition-all duration-300 ease-elegant; }
