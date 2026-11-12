@@ -59,13 +59,14 @@ function navItemsHtml() {
 function mobileItemsHtml() {
   return navigation.items
     .map((item, i) => {
+      const anim = `mm-anim" style="--mm-i:${i}"`
       if (item.type === 'link') {
-        return `<a class="mm-link" data-mm href="${item.href}">${item.label}</a>`
+        return `<a class="mm-link ${anim} data-mm href="${item.href}">${item.label}</a>`
       }
       const pid = `mm-dd-${i}`
       return `
         <div class="border-b border-ink/10">
-          <button type="button" class="mm-toggle" data-mm-toggle="${pid}" aria-expanded="false" aria-controls="${pid}">
+          <button type="button" class="mm-toggle ${anim} data-mm-toggle="${pid}" aria-expanded="false" aria-controls="${pid}">
             ${item.label}
             <svg class="mm-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
@@ -125,8 +126,8 @@ export function mountNavbar() {
     <div class="flex flex-col justify-between h-full overflow-y-auto">
       <nav aria-label="ناوبری موبایل">${mobileItemsHtml()}</nav>
       <div class="mt-8 flex flex-col gap-3">
-        <a href="${navigation.cta.href}" class="btn btn-gold w-full">${icon('phone', 'h-4 w-4')} ${navigation.cta.label}</a>
-        <a href="${navigation.search.href}" class="btn btn-ghost w-full">${icon('search', 'h-4 w-4')} جستجو در سایت</a>
+        <a href="${navigation.cta.href}" class="btn btn-gold w-full mm-anim" style="--mm-i:${navigation.items.length}">${icon('phone', 'h-4 w-4')} ${navigation.cta.label}</a>
+        <a href="${navigation.search.href}" class="btn btn-ghost w-full mm-anim" style="--mm-i:${navigation.items.length + 1}">${icon('search', 'h-4 w-4')} جستجو در سایت</a>
       </div>
     </div>
   `
@@ -152,17 +153,19 @@ export function mountNavbar() {
     menu.setAttribute('aria-hidden', String(!open))
     burger.setAttribute('aria-expanded', String(open))
     burger.classList.toggle('open', open)
+    document.documentElement.style.overflow = open ? 'hidden' : ''
     document.body.style.overflow = open ? 'hidden' : ''
-    if (open && !prefersReducedMotion) {
-      const links = menu.querySelectorAll('[data-mm]')
-      links.forEach((l, i) => {
-        l.style.opacity = '0'
-        l.style.transform = 'translateY(14px)'
-        setTimeout(() => {
-          l.style.transition = 'opacity .45s ease, transform .45s cubic-bezier(0.22,1,0.36,1)'
-          l.style.opacity = '1'
-          l.style.transform = 'translateY(0)'
-        }, 40 + i * 45)
+    if (open) {
+      // restart stagger animation from the beginning
+      menu.querySelectorAll('.mm-anim').forEach((l) => {
+        l.style.animation = 'none'
+        void l.offsetWidth
+        l.style.animation = ''
+      })
+    } else {
+      menu.querySelectorAll('[data-mm-toggle]').forEach((btn) => {
+        btn.setAttribute('aria-expanded', 'false')
+        menu.querySelector(`#${btn.dataset.mmToggle}`)?.classList.remove('open')
       })
     }
   }

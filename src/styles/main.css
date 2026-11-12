@@ -189,10 +189,25 @@
 
   /* Mobile menu */
   .mobile-menu {
-    @apply fixed inset-0 z-40 bg-paper flex flex-col pt-24 px-8 pb-8
+    @apply fixed inset-0 z-40 bg-paper flex flex-col pt-24 px-8 pb-8 overflow-x-hidden
       opacity-0 invisible transition-all duration-500 ease-elegant lg:hidden;
   }
   .mobile-menu.open { @apply opacity-100 visible; }
+  .mobile-menu .mm-anim {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .mobile-menu.open .mm-anim {
+    animation: mm-stagger 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: calc(var(--mm-i, 0) * 50ms + 100ms);
+  }
+  @keyframes mm-stagger {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu .mm-anim { opacity: 1; transform: none; animation: none; }
+  }
   .mobile-menu .mm-link {
     @apply block py-3.5 border-b border-ink/10 text-xl font-extrabold text-ink;
   }
@@ -202,7 +217,7 @@
   }
   .mobile-menu .mm-caret { @apply text-muted transition-transform duration-300 shrink-0; }
   .mobile-menu .mm-toggle[aria-expanded="true"] .mm-caret { @apply rotate-180; }
-  .mobile-menu .mm-panel { @apply hidden; }
+  .mobile-menu .mm-panel { @apply hidden overflow-x-hidden; }
   .mobile-menu .mm-panel.open { @apply block; }
   .mobile-menu .mm-sub { @apply flex flex-wrap gap-x-5 gap-y-2 py-3 ps-1 text-sm text-muted; }
 
