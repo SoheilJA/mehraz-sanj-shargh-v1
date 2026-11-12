@@ -217,8 +217,40 @@
   }
   .mobile-menu .mm-caret { @apply text-muted transition-transform duration-300 shrink-0; }
   .mobile-menu .mm-toggle[aria-expanded="true"] .mm-caret { @apply rotate-180; }
-  .mobile-menu .mm-panel { @apply hidden overflow-x-hidden; }
-  .mobile-menu .mm-panel.open { @apply block; }
+  .mobile-menu .mm-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow-x: hidden;
+    transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+    opacity: 0;
+  }
+  .mobile-menu .mm-panel > .mm-sub {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .mobile-menu .mm-panel.open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  .mobile-menu .mm-panel .mm-sub > a {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .mobile-menu .mm-panel.open .mm-sub > a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .mobile-menu .mm-panel.open .mm-sub > a:nth-child(1) { transition-delay: 60ms; }
+  .mobile-menu .mm-panel.open .mm-sub > a:nth-child(2) { transition-delay: 110ms; }
+  .mobile-menu .mm-panel.open .mm-sub > a:nth-child(3) { transition-delay: 160ms; }
+  .mobile-menu .mm-panel.open .mm-sub > a:nth-child(4) { transition-delay: 210ms; }
+  .mobile-menu .mm-panel.open .mm-sub > a:nth-child(5) { transition-delay: 260ms; }
+  .mobile-menu .mm-panel.open .mm-sub > a:nth-child(n+6) { transition-delay: 300ms; }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu .mm-panel,
+    .mobile-menu .mm-panel .mm-sub > a { transition: none; opacity: 1; transform: none; }
+  }
   .mobile-menu .mm-sub { @apply flex flex-wrap gap-x-5 gap-y-2 py-3 ps-1 text-sm text-muted; }
 
   .nav-burger span { @apply block w-6 h-[2px] bg-ink transition-all duration-300 ease-elegant; }
