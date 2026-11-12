@@ -190,7 +190,7 @@
   /* Mobile menu */
   .mobile-menu {
     @apply fixed inset-0 z-40 bg-paper flex flex-col pt-24 px-8 pb-8
-      opacity-0 invisible transition-all duration-500 ease-elegant md:hidden;
+      opacity-0 invisible transition-all duration-500 ease-elegant lg:hidden;
   }
   .mobile-menu.open { @apply opacity-100 visible; }
   .mobile-menu .mm-link {
