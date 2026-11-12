@@ -10,7 +10,35 @@ import { mountFooter } from './components/footer.js'
 import { mountLightbox } from './components/lightbox.js'
 import { initMotion, initReveals } from './utils/motion.js'
 
+/**
+ * GitHub Pages serves the site from a sub-path (BASE_URL). Source code
+ * uses root-absolute URLs ("/..."), so rewrite them at runtime for any
+ * DOM injected after the build — keeps a single source of truth.
+ */
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+function rewriteRootUrls(node) {
+  if (node.nodeType !== Node.ELEMENT_NODE) return
+  for (const el of [node, ...node.querySelectorAll('[href], [src]')]) {
+    for (const attr of ['href', 'src']) {
+      const value = el.getAttribute?.(attr)
+      if (value && value.startsWith('/') && !value.startsWith('//')) {
+        el.setAttribute(attr, BASE + value)
+      }
+    }
+  }
+}
+
+function watchRootUrls() {
+  if (BASE === '') return
+  rewriteRootUrls(document.body)
+  new MutationObserver((mutations) => {
+    for (const m of mutations) for (const n of m.addedNodes) rewriteRootUrls(n)
+  }).observe(document.body, { childList: true, subtree: true })
+}
+
 async function boot() {
+  watchRootUrls()
   mountNavbar()
   mountFooter()
   initMotion()

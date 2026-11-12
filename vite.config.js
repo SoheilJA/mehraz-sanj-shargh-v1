@@ -19,8 +19,32 @@ function collectHtmlInputs(dir, entries = {}) {
   return entries
 }
 
+const repoName = 'mehraz-sanj-shargh-v1'
+
+/**
+ * Rewrite root-absolute URLs ("/...", "/src/...") in emitted HTML so the
+ * site works when served from a sub-path like GitHub Pages project sites.
+ */
+function rewriteAbsoluteBase() {
+  return {
+    name: 'rewrite-absolute-base',
+    generateBundle(_, bundle) {
+      for (const file of Object.values(bundle)) {
+        if (file.type === 'asset' && file.fileName.endsWith('.html')) {
+          let html = file.source
+          html = html.replace(/(href|src)=("|')(\/(?!\/))/g, `$1=$2/${repoName}/`)
+          html = html.replace(/(content=("|')\/(?!\/))/g, `$1/${repoName}/`)
+          file.source = html
+        }
+      }
+    },
+  }
+}
+
 export default defineConfig({
   root: rootDir,
+  base: `/${repoName}/`,
+  plugins: [rewriteAbsoluteBase()],
   build: {
     outDir: 'dist',
     emptyOutDir: true,

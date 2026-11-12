@@ -9,7 +9,9 @@ import { icon } from '../utils/dom.js'
 import { lenis, prefersReducedMotion } from '../utils/motion.js'
 
 function isActive(item) {
+  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
   let path = location.pathname.replace(/\/$/, '') || '/index.html'
+  if (base && path.startsWith(base)) path = path.slice(base.length) || '/index.html'
   if (path === '') path = '/index.html'
   if (path === '/index.html' && item.href === '/index.html') return true
   return (item.match || []).some((m) => {
