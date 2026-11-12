@@ -6,7 +6,7 @@
 import { navigation } from '../data/navigation.js'
 import { company } from '../data/company.js'
 import { icon } from '../utils/dom.js'
-import { lenis, prefersReducedMotion } from '../utils/motion.js'
+import { prefersReducedMotion } from '../utils/motion.js'
 
 function isActive(item) {
   const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')

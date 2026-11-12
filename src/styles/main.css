@@ -109,12 +109,6 @@
   }
   .card:hover { @apply border-ink/25; box-shadow: 0 24px 60px rgb(30 34 41 / 0.09); }
 
-  .card-dark {
-    @apply relative bg-charcoal/60 border border-white/10 transition-all duration-500 ease-elegant;
-    border-radius: 3px;
-  }
-  .card-dark:hover { @apply border-gold/40; box-shadow: 0 24px 60px rgb(0 0 0 / 0.35); }
-
   .tech-code {
     @apply font-mono text-[0.68rem] uppercase text-muted;
     letter-spacing: 0.18em;

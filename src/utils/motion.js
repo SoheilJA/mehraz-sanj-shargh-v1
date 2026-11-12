@@ -13,7 +13,7 @@ export const prefersReducedMotion =
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /** Current Lenis instance (null when reduced motion is on). */
-export let lenis = null
+let lenis = null
 
 function initLenis() {
   lenis = new Lenis({
@@ -91,11 +91,6 @@ export function pageEntrance(scope = document) {
     { opacity: 0, y: 18 },
     { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12, delay: 0.15 }
   )
-}
-
-/** Refresh ScrollTrigger positions after dynamic content is rendered. */
-export function refreshMotion() {
-  ScrollTrigger.refresh()
 }
 
 /** Boot motion for the current page. Called once from main.js. */
