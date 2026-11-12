@@ -58,15 +58,21 @@ function navItemsHtml() {
 
 function mobileItemsHtml() {
   return navigation.items
-    .map((item) => {
+    .map((item, i) => {
       if (item.type === 'link') {
         return `<a class="mm-link" data-mm href="${item.href}">${item.label}</a>`
       }
+      const pid = `mm-dd-${i}`
       return `
-        <div class="border-b border-ink/10 py-4">
-          <a class="mm-link !border-0 !py-0" data-mm href="${item.href}">${item.label}</a>
-          <div class="mm-sub">
-            ${item.children.map((c) => `<a data-mm href="${c.href}" class="hover:text-golddeep transition-colors">${c.label}</a>`).join('')}
+        <div class="border-b border-ink/10">
+          <button type="button" class="mm-toggle" data-mm-toggle="${pid}" aria-expanded="false" aria-controls="${pid}">
+            ${item.label}
+            <svg class="mm-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="mm-panel" id="${pid}">
+            <div class="mm-sub">
+              ${item.children.map((c) => `<a data-mm href="${c.href}" class="hover:text-golddeep transition-colors">${c.label}</a>`).join('')}
+            </div>
           </div>
         </div>`
     })
@@ -106,16 +112,25 @@ export function mountNavbar() {
         </button>
       </div>
     </div>
-    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-      <div class="flex flex-col justify-between h-full overflow-y-auto">
-        <nav aria-label="ناوبری موبایل">${mobileItemsHtml()}</nav>
-        <div class="mt-8 flex flex-col gap-3">
-          <a href="${navigation.cta.href}" class="btn btn-gold w-full">${icon('phone', 'h-4 w-4')} ${navigation.cta.label}</a>
-          <a href="${navigation.search.href}" class="btn btn-ghost w-full">${icon('search', 'h-4 w-4')} جستجو در سایت</a>
-        </div>
+  `
+
+  // Mobile menu must live outside the header: the header's backdrop-filter
+  // turns it into the containing block for fixed descendants, which would
+  // collapse the full-screen menu into the header's own box.
+  const menu = document.createElement('div')
+  menu.className = 'mobile-menu'
+  menu.id = 'mobile-menu'
+  menu.setAttribute('aria-hidden', 'true')
+  menu.innerHTML = `
+    <div class="flex flex-col justify-between h-full overflow-y-auto">
+      <nav aria-label="ناوبری موبایل">${mobileItemsHtml()}</nav>
+      <div class="mt-8 flex flex-col gap-3">
+        <a href="${navigation.cta.href}" class="btn btn-gold w-full">${icon('phone', 'h-4 w-4')} ${navigation.cta.label}</a>
+        <a href="${navigation.search.href}" class="btn btn-ghost w-full">${icon('search', 'h-4 w-4')} جستجو در سایت</a>
       </div>
     </div>
   `
+  document.body.appendChild(menu)
 
   // --- scroll state (rAF-throttled to avoid layout thrash during smooth scroll) ---
   let scrollTick = false
@@ -132,7 +147,6 @@ export function mountNavbar() {
 
   // --- mobile menu ---
   const burger = header.querySelector('#nav-burger')
-  const menu = header.querySelector('#mobile-menu')
   const setOpen = (open) => {
     menu.classList.toggle('open', open)
     menu.setAttribute('aria-hidden', String(!open))
@@ -153,6 +167,16 @@ export function mountNavbar() {
     }
   }
   burger.addEventListener('click', () => setOpen(!menu.classList.contains('open')))
+
+  // Accordion dropdowns for section groups
+  menu.querySelectorAll('[data-mm-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const panel = menu.querySelector(`#${btn.dataset.mmToggle}`)
+      if (!panel) return
+      const open = panel.classList.toggle('open')
+      btn.setAttribute('aria-expanded', String(open))
+    })
+  })
   menu.querySelectorAll('[data-mm]').forEach((a) =>
     a.addEventListener('click', () => setOpen(false))
   )
