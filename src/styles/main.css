@@ -191,6 +191,8 @@
   .marquee { @apply relative overflow-hidden; }
   .marquee-track {
     @apply flex w-max items-stretch;
+    will-change: transform;
+    backface-visibility: hidden;
     animation: marquee-rtl var(--marquee-dur, 46s) linear infinite;
   }
   .marquee:hover .marquee-track { animation-play-state: paused; }

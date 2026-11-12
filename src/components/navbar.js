@@ -117,8 +117,16 @@ export function mountNavbar() {
     </div>
   `
 
-  // --- scroll state ---
-  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 32)
+  // --- scroll state (rAF-throttled to avoid layout thrash during smooth scroll) ---
+  let scrollTick = false
+  const onScroll = () => {
+    if (scrollTick) return
+    scrollTick = true
+    requestAnimationFrame(() => {
+      header.classList.toggle('scrolled', window.scrollY > 32)
+      scrollTick = false
+    })
+  }
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
 

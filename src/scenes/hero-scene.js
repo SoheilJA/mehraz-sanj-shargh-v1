@@ -50,7 +50,7 @@ export function mountHeroScene(holder) {
     return { dispose: () => {} }
   }
 
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5))
   renderer.setClearColor(0x000000, 0)
   holder.appendChild(renderer.domElement)
 
@@ -329,9 +329,12 @@ export function mountHeroScene(holder) {
   resize()
   window.addEventListener('resize', resize)
 
-  const io = new IntersectionObserver((entries) => {
-    active = entries.some((e) => e.isIntersecting)
-  })
+  const io = new IntersectionObserver(
+    (entries) => {
+      active = entries.some((e) => e.isIntersecting)
+    },
+    { rootMargin: '80px 0px' }
+  )
   io.observe(holder)
 
   const onPointer = (e) => {

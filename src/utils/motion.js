@@ -17,9 +17,11 @@ export let lenis = null
 
 function initLenis() {
   lenis = new Lenis({
-    duration: 1.1,
+    duration: 1.0,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
+    wheelMultiplier: 1.0,
+    touchMultiplier: 1.6,
   })
   lenis.on('scroll', ScrollTrigger.update)
   gsap.ticker.add((time) => lenis.raf(time * 1000))
