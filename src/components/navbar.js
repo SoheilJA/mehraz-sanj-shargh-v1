@@ -100,7 +100,7 @@ export function mountNavbar() {
         <a href="${navigation.cta.href}" class="btn btn-gold !h-10 !px-5 !text-[0.85rem] hidden md:inline-flex">
           ${icon('phone', 'h-4 w-4')} ${navigation.cta.label}
         </a>
-        <button id="nav-burger" class="lg:hidden inline-flex flex-col items-center justify-center gap-1.5 h-11 w-11 border border-ink/15 rounded-sm text-ink"
+        <button id="nav-burger" class="nav-burger lg:hidden inline-flex flex-col items-center justify-center gap-1.5 h-11 w-11 border border-ink/15 rounded-sm text-ink"
                 aria-label="منوی موبایل" aria-expanded="false" aria-controls="mobile-menu">
           <span></span><span></span><span></span>
         </button>
