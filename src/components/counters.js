@@ -1,8 +1,8 @@
 /**
- * Animated counters (anime.js). Only used with verified indicators.
+ * Animated counters (GSAP). Only used with verified indicators.
  * IntersectionObserver starts the animation once when visible.
  */
-import anime from 'animejs'
+import { gsap } from 'gsap'
 import { faDigits } from '../utils/str.js'
 import { prefersReducedMotion } from '../utils/motion.js'
 
@@ -21,14 +21,12 @@ export function animateCounters(root = document) {
         if (!entries.some((e) => e.isIntersecting)) return
         io.disconnect()
         const state = { v: 0 }
-        anime({
-          targets: state,
+        gsap.to(state, {
           v: target,
-          round: 1,
-          duration: 1500,
-          easing: 'easeOutExpo',
-          update: () => {
-            node.textContent = faDigits(state.v)
+          duration: 1.5,
+          ease: 'expo.out',
+          onUpdate: () => {
+            node.textContent = faDigits(Math.round(state.v))
           },
         })
       },
