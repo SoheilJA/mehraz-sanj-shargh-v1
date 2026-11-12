@@ -50,6 +50,16 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: collectHtmlInputs(rootDir),
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('three') || id.includes('tsl')) return 'vendor-three'
+            if (id.includes('gsap') || id.includes('lenis')) return 'vendor-motion'
+            if (id.includes('lucide')) return 'vendor-icons'
+            return 'vendor'
+          }
+        },
+      },
     },
   },
 })
