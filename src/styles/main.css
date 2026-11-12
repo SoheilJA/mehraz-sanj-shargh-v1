@@ -38,6 +38,8 @@
 /* ---------- Base ---------- */
 @layer base {
   html { overflow-x: clip; }
+  /* FOUC guard: hide content until the stylesheet has loaded; main.js clears it */
+  html.js-loading body { visibility: hidden; }
   body {
     @apply bg-paper text-ink font-sans antialiased;
     overflow-x: clip;
@@ -170,6 +172,9 @@
   .mobile-menu .mm-sub { @apply flex flex-wrap gap-x-5 gap-y-2 py-3 ps-1 text-sm text-muted; }
 
   .nav-burger span { @apply block w-6 h-[2px] bg-ink transition-all duration-300 ease-elegant; }
+  .nav-burger.open span:nth-child(1) { @apply translate-y-[8px] rotate-45; }
+  .nav-burger.open span:nth-child(2) { @apply opacity-0; }
+  .nav-burger.open span:nth-child(3) { @apply -translate-y-[8px] -rotate-45; }
 
   /* ---------- Hero ---------- */
   .blueprint-grid {

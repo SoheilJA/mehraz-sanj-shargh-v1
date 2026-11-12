@@ -137,6 +137,7 @@ export function mountNavbar() {
     menu.classList.toggle('open', open)
     menu.setAttribute('aria-hidden', String(!open))
     burger.setAttribute('aria-expanded', String(open))
+    burger.classList.toggle('open', open)
     document.body.style.overflow = open ? 'hidden' : ''
     if (open && !prefersReducedMotion) {
       const links = menu.querySelectorAll('[data-mm]')

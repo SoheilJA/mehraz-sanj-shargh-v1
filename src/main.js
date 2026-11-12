@@ -38,6 +38,9 @@ function watchRootUrls() {
 }
 
 async function boot() {
+  // Stylesheet has arrived (this module imports it) — clear the FOUC guard.
+  document.documentElement.classList.remove('js-loading')
+
   watchRootUrls()
   mountNavbar()
   mountFooter()
