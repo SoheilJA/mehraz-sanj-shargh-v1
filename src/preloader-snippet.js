@@ -1,11 +1,11 @@
-/**
+﻿/**
  * Inline boot preloader snippet — injected into every page's <head>.
  * Paints a minimal branded preloader before any CSS/JS bundle arrives.
  * The full styling lives in main.css; a fallback copy lives inline so the
  * very first paint is already branded even before main.css loads.
  */
 export const BOOT_PRELOADER_SNIPPET = `
-<div id="boot-preloader" aria-hidden="true">
+<div id="boot-preloader" data-no-rewrite aria-hidden="true">
   <style>
     /* Fallback styling: keeps the preloader branded before main.css arrives. */
     #boot-preloader { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: #f7f4ee; }

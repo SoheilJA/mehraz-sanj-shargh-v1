@@ -26,6 +26,9 @@ const BASE = import.meta.env.BASE_URL.replace(/\/$/, '')
 function rewriteRootUrls(node) {
   if (node.nodeType !== Node.ELEMENT_NODE) return
   for (const el of [node, ...node.querySelectorAll('[href], [src]')]) {
+    // elements marked data-no-rewrite already carry the final base path
+    // (e.g. the inline boot preloader, rewritten at build time)
+    if (el.closest?.('[data-no-rewrite]')) continue
     for (const attr of ['href', 'src']) {
       const value = el.getAttribute?.(attr)
       if (value && value.startsWith('/') && !value.startsWith('//')) {
