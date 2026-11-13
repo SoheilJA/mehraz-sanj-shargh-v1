@@ -9,6 +9,12 @@ import { mountNavbar } from './components/navbar.js'
 import { mountFooter } from './components/footer.js'
 import { mountLightbox } from './components/lightbox.js'
 import { initMotion, initReveals } from './utils/motion.js'
+import {
+  markVisited,
+  dismissBootPreloader,
+  dismissTransitionVeil,
+  initPageTransitions,
+} from './components/preloader.js'
 
 /**
  * GitHub Pages serves the site from a sub-path (BASE_URL). Source code
@@ -60,6 +66,13 @@ async function boot() {
   // Icons and reveals for content rendered by page modules.
   initIcons()
   initReveals()
+
+  // Preloaders: release the boot screen and any navigation veil, then
+  // remember the visit so subsequent navigations use the light veil only.
+  dismissBootPreloader()
+  dismissTransitionVeil()
+  markVisited()
+  initPageTransitions()
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot)
